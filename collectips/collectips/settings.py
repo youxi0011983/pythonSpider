@@ -13,22 +13,25 @@ SPIDER_MODULES = ['collectips.spiders']
 NEWSPIDER_MODULE = 'collectips.spiders'
 
 # database connetion parameters
-DBKWARGS = {'db': 'proxyIP', 'user': 'root', 'passwd': '', 'host': 'xiongliang.synology.me', 'user_unicode': True, 'charset': 'utf-8'}
+DBKWARGS = {'db': 'proxyIP', 'user': 'root', 'passwd': '', 'host': 'xiongliang.synology.me', 'charset': 'utf8mb4'}
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'collectips (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.62 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+#CONCURRENT_REQUESTS = 2
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 4
+# 随机下载延迟
+RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16

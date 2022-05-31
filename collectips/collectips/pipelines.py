@@ -5,24 +5,34 @@
 
 
 # useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
 import pymysql
+from scrapy.crawler import Crawler
 
 
 class CollectipsPipeline:
+
+    # 链接数据库
+    @classmethod
+    def from_crawler(cls, crawler: Crawler):
+        DBKWARGS = crawler.settings['DBKWARGS']
+        return cls(DBKWARGS)
+
+    def __init__(self, DBKWARGS):
+        self.conn = pymysql.connect(**DBKWARGS)
+        self.cur = self.conn.cursor()
+
+    def close_spider(self, spider):
+        self.cur.close()
+        self.conn.close()
+
     def process_item(self, item, spider):
-        DBKWARGS = spider.setting.get('DBKWARGS')
-        conn = pymysql.connect(**DBKWARGS)
-        cur = conn.cursor()
-        sql = "insert into proxy (IP, PORT, TYPE, POSITION, SPEED, LAST_CHECK_TIME) values(%s,%s,%s,%S,%S,%S)"
+        sql = "insert into proxy (ip, port, type , position,speed,updatatime) values(%s,%s,%s,%s,%s,%s)"
         lis = (item['IP'], item['PORT'], item['TYPE'], item['POSITION'], item['SPEED'], item['LAST_CHECK_TIME'])
         try:
-            cur.execute(sql, lis)
+            self.cur.execute(sql, lis)
         except Exception as e:
             print("Insert error:", e)
-            conn.rollback()
+            self.conn.rollback()
         else:
-            conn.commit()
-        cur.close()
-        conn.close()
+            self.conn.commit()
         return item
